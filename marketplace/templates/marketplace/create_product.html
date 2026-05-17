@@ -1,0 +1,56 @@
+{% extends 'marketplace/base.html' %}
+
+{% block title %}{% if is_edit %}Редагувати оголошення{% else %}Створити оголошення{% endif %}{% endblock %}
+
+{% block content %}
+
+<div class="form-wrap">
+    <h1>{% if is_edit %}Редагувати оголошення{% else %}Створити оголошення{% endif %}</h1>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="form-row">
+            {{ form.title.label_tag }}
+            {{ form.title }}
+            {% if form.title.errors %}<div class="errors">{{ form.title.errors }}</div>{% endif %}
+        </div>
+
+        <div class="form-row">
+            {{ form.description.label_tag }}
+            {{ form.description }}
+            {% if form.description.errors %}<div class="errors">{{ form.description.errors }}</div>{% endif %}
+        </div>
+
+        <div class="form-row">
+            {{ form.category.label_tag }}
+            {{ form.category }}
+            {% if form.category.errors %}<div class="errors">{{ form.category.errors }}</div>{% endif %}
+        </div>
+
+        <div class="form-row">
+            {{ form.condition.label_tag }}
+            {{ form.condition }}
+            {% if form.condition.errors %}<div class="errors">{{ form.condition.errors }}</div>{% endif %}
+        </div>
+
+        <div class="form-row">
+            {{ form.price.label_tag }}
+            {{ form.price }}
+            {% if form.price.errors %}<div class="errors">{{ form.price.errors }}</div>{% endif %}
+        </div>
+
+        <div class="form-row">
+            {{ form.image.label_tag }}
+            {{ form.image }}
+            {% if form.image.errors %}<div class="errors">{{ form.image.errors }}</div>{% endif %}
+        </div>
+
+        <div class="form-buttons">
+            <button type="submit" class="btn btn-blue">Зберегти</button>
+            <a href="{% url 'marketplace:home' %}" class="btn btn-gray">Скасувати</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'marketplace/base.html' %}
+
+{% block title %}Оголошення{% endblock %}
+
+{% block content %}
+
+<form method="get" action="" class="filter-form">
+    <input type="text" name="q" placeholder="Пошук" value="{{ query|default:'' }}">
+
+    <select name="category">
+        <option value="">Всі категорії</option>
+        {% for category in categories %}
+            <option value="{{ category.id }}"
+                {% if selected_category == category.id|stringformat:"s" %}selected{% endif %}>
+                {{ category.name }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <select name="sort">
+        <option value="" {% if not selected_sort %}selected{% endif %}>Без сортування</option>
+        <option value="price_asc" {% if selected_sort == "price_asc" %}selected{% endif %}>Дешевші спочатку</option>
+        <option value="price_desc" {% if selected_sort == "price_desc" %}selected{% endif %}>Дорожчі спочатку</option>
+    </select>
+
+    <button type="submit">Знайти</button>
+</form>
+
+{% if query %}
+    <h2>Результати пошуку: {{ query }}</h2>
+{% endif %}
+
+<div class="products">
+    {% for product in products %}
+    <div class="card">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.title }}">
+        {% else %}
+            <div class="no-image">Без фото</div>
+        {% endif %}
+
+        <h3><a href="{% url 'marketplace:product_detail' product.pk %}">{{ product.title }}</a></h3>
+        <p class="price">{{ product.price }} грн</p>
+        <p>Стан: {{ product.get_condition_display }}</p>
+        <p>Категорія: {{ product.category.name }}</p>
+        <p>&#9829; {{ product.total_likes }}</p>
+    </div>
+    {% empty %}
+    <p>Оголошень не знайдено.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}

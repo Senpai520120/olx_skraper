@@ -1,0 +1,75 @@
+{% extends 'marketplace/base.html' %}
+
+{% block title %}{{ product.title }}{% endblock %}
+
+{% block content %}
+
+<p><a href="{% url 'marketplace:home' %}">&larr; Назад до оголошень</a></p>
+
+<div class="detail-wrap">
+    <div class="detail-top">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.title }}">
+        {% else %}
+            <div class="detail-no-img">Без фото</div>
+        {% endif %}
+
+        <div class="detail-info">
+            <h1>{{ product.title }}</h1>
+            <div class="detail-price">{{ product.price }} грн</div>
+            <p>Стан: {{ product.get_condition_display }}</p>
+            <p>Категорія: {{ product.category.name }}</p>
+            <p>Продавець: {{ product.owner.username }}</p>
+            <p>Дата: {{ product.created_at|date:"d.m.Y" }}</p>
+
+            {% if product.description %}
+                <div class="description">{{ product.description }}</div>
+            {% endif %}
+
+            <div class="detail-actions">
+                {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'marketplace:product_like' product.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="like-btn">&#9829; {{ product.total_likes }}</button>
+                    </form>
+                {% else %}
+                    <p>Увійдіть, щоб лайкати</p>
+                {% endif %}
+
+                {% if request.user == product.owner %}
+                    <a href="{% url 'marketplace:product_edit' product.pk %}" class="btn btn-gray">Редагувати</a>
+                    <a href="{% url 'marketplace:product_delete' product.pk %}" class="btn btn-red">Видалити</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="comments">
+        <h2>Коментарі</h2>
+
+        {% if user.is_authenticated %}
+        <div class="comment-form">
+            <form method="post" action="{% url 'marketplace:add_comment' product.pk %}">
+                {% csrf_token %}
+                {{ comment_form.text }}
+                <button type="submit">Додати коментар</button>
+            </form>
+        </div>
+        {% else %}
+        <p><a href="{% url 'marketplace:login' %}">Увійдіть</a>, щоб залишити коментар.</p>
+        {% endif %}
+
+        {% for comment in comments %}
+        <div class="comment">
+            <div class="comment-meta">
+                <strong>{{ comment.author.username }}</strong> &mdash; {{ comment.created_at|date:"d.m.Y H:i" }}
+            </div>
+            <p>{{ comment.text }}</p>
+        </div>
+        {% empty %}
+        <p>Коментарів поки немає.</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

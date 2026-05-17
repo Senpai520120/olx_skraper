@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(.venv/Scripts/pip install *)",
+      "Bash(.venv/Scripts/pip freeze *)",
+      "Bash(.venv/Scripts/python manage.py check)",
+      "Bash(.venv/Scripts/python manage.py runserver)",
+      "Bash(.venv/Scripts/python manage.py makemigrations)",
+      "Bash(.venv/Scripts/python manage.py migrate)",
+      "Bash(.venv/Scripts/python manage.py shell)",
+      "Bash(python manage.py runserver)",
+      "Bash(python *)",
+      "Bash(pip install *)"
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{% extends 'marketplace/base.html' %}
+
+{% block title %}Видалити оголошення{% endblock %}
+
+{% block content %}
+
+<div class="delete-wrap">
+    <h1>Видалити оголошення?</h1>
+    <p>Ви впевнені, що хочете видалити "{{ product.title }}"? Цю дію не можна скасувати.</p>
+    <form method="post">
+        {% csrf_token %}
+        <div class="buttons">
+            <button type="submit" class="btn btn-red">Видалити</button>
+            <a href="{% url 'marketplace:product_detail' product.pk %}" class="btn btn-gray">Скасувати</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
